@@ -33,23 +33,26 @@ const userSchema = new mongoose.Schema({
             return this.role === 'doctor'; 
         },
         trim: true
+    },
+    address: {
+        type: String,
+        trim: true
+    },
+    phone: {
+        type: String,
+        trim: true,
+        match: [/^\+?[1-9]\d{1,14}$/, 'Please enter a valid phone number']
     }
 }, { 
     timestamps: true 
 });
 
 // Hash the password before saving the user
-userSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) {
-        return next();
-    }
-    try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch (error) {
-        next(error);
-    }
+userSchema.pre('save', async function() {
+    if (!this.isModified('password')) 
+        return;
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
 });
 
 // Method to compare entered password with hashed password
