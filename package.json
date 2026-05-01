@@ -1,0 +1,25 @@
+{
+  "name": "health-link-hub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-prod": "concurrently \"npm start --prefix backend\" \"npm run preview --prefix frontend\"",
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fani05/Health-Link-Hub.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/fani05/Health-Link-Hub/issues"
+  },
+  "homepage": "https://github.com/fani05/Health-Link-Hub#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
