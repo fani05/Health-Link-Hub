@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:5000/api',
+    baseURL: import.meta.env.VITE_API_URL,
 });
 
-// trimite automat token-ul la fiecare request
+// set auth token in headers for all requests
 axiosClient.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {
