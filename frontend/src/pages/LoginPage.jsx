@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import clinicImg from '../assets/clinic.png';
 import './LoginPage.css';
 
@@ -19,7 +19,7 @@ function LoginPage() {
         setError('');
         setLoading(true);
         try {
-            const user = await login(email, password);
+            const user = await login(email, password, remember);
             if (user.role === 'doctor') {
                 navigate('/doctor-dashboard');
             } else {
