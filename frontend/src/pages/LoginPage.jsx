@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import clinicImg from '../assets/clinic.png';
 import './LoginPage.css';
+
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -13,6 +14,8 @@ function LoginPage() {
     const [loading, setLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const successMessage = location.state?.message;
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -62,8 +65,8 @@ function LoginPage() {
                             Sign in to manage your appointments and access your medical history.
                         </p>
 
+                        {successMessage && <div className="success-banner">{successMessage}</div>}
                         {error && <div className="error-banner">{error}</div>}
-
                         <form onSubmit={handleLogin}>
                             <div className="field">
                                 <label>Email</label>

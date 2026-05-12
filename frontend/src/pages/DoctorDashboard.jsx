@@ -24,8 +24,6 @@ function DoctorDashboard() {
                         <span className="brand-name">Health<span>Link</span> Hub</span>
                     </div>
                     <div className="nav-links">
-                        <a href="#">Dashboard</a>
-                        <a href="#">Patients</a>
                         <Link to="/">Home</Link>
                         <button className="btn-logout" onClick={handleLogout}>Log out</button>
                     </div>
