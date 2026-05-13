@@ -16,6 +16,17 @@ export const registerUser = async (req, res) => {
         
         const { name, email, password, role, specialization, address, phone } = req.body;
 
+        // validate role explicitly - for security
+        const allowedRoles = ['patient', 'doctor'];
+        if (!allowedRoles.includes(role)) {
+            return res.status(400).json({ message: 'Invalid role specified' });
+        }
+
+        // doctor must have specialization - for security
+        if (role === 'doctor' && (!specialization || !specialization.trim())) {
+            return res.status(400).json({ message: 'Specialization is required for doctors' });
+        }
+
         // verify if user already exists
         const userExists = await User.findOne({ email });
         if (userExists) {

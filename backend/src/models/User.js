@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
+        required: [true, 'Please specify a role'],
         enum: ['patient', 'doctor'],
         default: 'patient'
     }, 
@@ -36,18 +37,21 @@ const userSchema = new mongoose.Schema({
     },
     address: {
         type: String,
+        required: [true, 'Please enter an address'],
         trim: true
     },
     phone: {
         type: String,
+        required: [true, 'Please enter a phone number'],
         trim: true,
-        match: [/^\+?[1-9]\d{1,14}$/, 'Please enter a valid phone number']
+        unique: true,
+        match: [/^\+?[1-9]\d{7,14}$/, 'Please enter a valid phone number']
     }
 }, { 
     timestamps: true 
 });
 
-// Hash the password before saving the user
+// Hash the password before saving the user for the first time or when it is modified
 userSchema.pre('save', async function() {
     if (!this.isModified('password')) 
         return;

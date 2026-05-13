@@ -29,29 +29,34 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
         if (token) {
-            axiosClient.get('/auth/me')
-                .then(res => setUser(res.data))
-                .catch((error) => {
+            const checkUser = async () => {
+                try {
+                    const res = await axiosClient.get('/auth/me');
+                    setUser(res.data);
+                } catch (error) {
                     if (error.response?.status === 401) {
                         clearStorage();
                         setUser(null);
                     }
-                })
-                .finally(() => setLoading(false));
+                } finally {
+                    setLoading(false);
+                }
+            };
+            checkUser();
         } else {
             clearStorage();
             setUser(null);
             setLoading(false);
         }
-    }, []);
+    }, []); // [] ensures this runs only once and not on every render
 
-    useEffect(() => {
+    useEffect(() => { // Listen for unauthorized events to handle token expiration or invalidation
         const handleUnauthorized = () => {
             setUser(null);
         };
         window.addEventListener('auth:unauthorized', handleUnauthorized);
         return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
-    }, []);
+    }, []); // [] ensures this runs only once and not on every render
 
     const login = async (email, password, remember) => {
         const res = await axiosClient.post('/auth/login', { email, password });
@@ -64,10 +69,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         setUser(null);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('user');
+        clearStorage();
     };
 
     return (

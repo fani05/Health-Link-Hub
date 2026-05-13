@@ -14,6 +14,8 @@ axiosClient.interceptors.request.use((config) => {
     return config;
 });
 
+// Handle 401 errors globally, except for authentication endpoints 
+// This ensures that if a token is invalid or expired, the user will be logged out and prompted to log in again
 axiosClient.interceptors.response.use(
     (response) => response,
     (error) => {
