@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axiosClient from '../api/axiosClient';
+import Navbar from '../components/Navbar';
 import './RegisterPage.css';
 
 function RegisterPage() {
@@ -67,20 +68,7 @@ function RegisterPage() {
         <div className="page">
             <div className="card register-card">
                 {/* Nav */}
-                <nav className="nav">
-                    <div className="brand">
-                        <div className="brand-mark">
-                            <svg viewBox="0 0 20 20" fill="none">
-                                <path d="M10 3v14M3 10h14" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-                            </svg>
-                        </div>
-                        <span className="brand-name">Health<span>Link</span> Hub</span>
-                    </div>
-                    <div className="nav-links">
-                        <Link to="/">Home</Link>
-                        <Link to="/register" className="active">Sign up</Link>
-                    </div>
-                </nav>
+                <Navbar />
 
                 <div className="register-body">
                     <div className="register-header">

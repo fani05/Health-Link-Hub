@@ -3,8 +3,9 @@ import { AuthProvider } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DoctorDashboard from './pages/DoctorDashboard';
-import ProtectedRoute from './components/ProtectedRoute';
-import PublicRoute from './components/PublicRoute';
+import ProtectedRoute from './routes/ProtectedRoute';
+import PublicRoute from './routes/PublicRoute';
+import PatientDashboard from './pages/PatientDashboard';
 
 function App() {
     return (
@@ -25,6 +26,11 @@ function App() {
                     <Route path="/doctor-dashboard" element={
                         <ProtectedRoute allowedRole="doctor">
                             <DoctorDashboard />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/patient-dashboard" element={
+                        <ProtectedRoute allowedRole="patient">
+                            <PatientDashboard />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<Navigate to="/login" />} />

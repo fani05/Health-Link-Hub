@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
+import Navbar from '../components/Navbar';
 import clinicImg from '../assets/clinic.png';
 import './LoginPage.css';
-
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -39,20 +39,7 @@ function LoginPage() {
         <div className="page">
             <div className="card">
                 {/* Nav */}
-                <nav className="nav">
-                    <div className="brand">
-                        <div className="brand-mark">
-                            <svg viewBox="0 0 20 20" fill="none">
-                                <path d="M10 3v14M3 10h14" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-                            </svg>
-                        </div>
-                        <span className="brand-name">Health<span>Link</span> Hub</span>
-                    </div>
-                    <div className="nav-links">
-                        <Link to="/" className="active">Home</Link>
-                        <Link to="/register">Sign up</Link>
-                    </div>
-                </nav>
+                <Navbar />
 
                 {/* Hero */}
                 <div className="hero">
@@ -111,7 +98,6 @@ function LoginPage() {
                                     <span className="box"></span>
                                     Remember me
                                 </label>
-                                <a href="#" className="forgot">Forgot password?</a>
                             </div>
 
                             <button type="submit" className="btn-login" disabled={loading}>
