@@ -6,6 +6,28 @@ const VALID_SLOTS = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
                      '16:00', '16:30'];
 
 
+// This function is called before fetching appointments for a user to ensure that any past 
+// appointments whith no response are marked rejected
+const markExpiredAppointments = async (filter) => {
+    const now = new Date();
+    const appointments = await Appointment.find({
+        ...filter,
+        status: { $in: ['accepted', 'pending'] },
+    });
+
+    for (const appt of appointments) {
+        const apptDate = new Date(appt.date);
+        const [hours, minutes] = appt.time.split(':').map(Number);
+        apptDate.setHours(hours, minutes, 0, 0);
+
+        if (apptDate < now) {
+            appt.status = 'rejected';
+            appt.rejectionReason = '[System] Doctor did not respond in time';
+            await appt.save();
+        }
+    }
+};
+
 export const createAppointment = async (req, res) => {
     try {
         const { doctor, date, time } = req.body;
@@ -86,8 +108,34 @@ export const createAppointment = async (req, res) => {
     }
 };
 
+export const cancelAppointment = async (req, res) => {
+    try {
+        const appointment = await Appointment.findById(req.params.id);
+        if (!appointment) {
+            return res.status(404).json({ message: 'Appointment not found' });
+        }
+
+        if (appointment.patient.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        if (!['pending', 'accepted'].includes(appointment.status)) {
+            return res.status(400).json({ message: `Cannot cancel a ${appointment.status} appointment` });
+        }
+
+        appointment.status = 'cancelled';
+        await appointment.save();
+        res.json(appointment);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
 export const getMyAppointments = async (req, res) => {
     try {
+        // Mark expired appointments before fetching
+        await markExpiredAppointments({ patient: req.user._id });
+
         const appointments = await Appointment.find({ patient: req.user._id })
             .populate('doctor', 'name specialization')
             .sort({ date: -1, time: -1 });

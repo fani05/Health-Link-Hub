@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Please enter a name'],
-        trim: true // Remove leading/trailing whitespace
+        trim: true, // Remove leading/trailing whitespace
+        maxlength: [25, 'Name cannot exceed 25 characters']
     },
     email: {
         type: String,
@@ -14,13 +15,15 @@ const userSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
         trim: true,
-        match: [/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gm, 'Please enter a valid email address']
+        match: [/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gm, 'Please enter a valid email address'],
+        maxlength: [30, 'Email cannot exceed 30 characters']
     },
     password: {
         type: String,
         required: [true, 'Please enter a password'],
         minlength: [6, 'Password must be at least 6 characters long'],
-        select: false
+        select: false,
+        maxlength: [30, 'Password cannot exceed 30 characters']
     },
     role: {
         type: String,
@@ -33,19 +36,22 @@ const userSchema = new mongoose.Schema({
         required: function() { 
             return this.role === 'doctor'; 
         },
-        trim: true
+        trim: true,
+        maxlength: [20, 'Specialization cannot exceed 20 characters']
     },
     address: {
         type: String,
         required: [true, 'Please enter an address'],
-        trim: true
+        trim: true,
+        maxlength: [100, 'Address cannot exceed 100 characters']
     },
     phone: {
         type: String,
         required: [true, 'Please enter a phone number'],
         trim: true,
         unique: true,
-        match: [/^\+?[1-9]\d{7,14}$/, 'Please enter a valid phone number']
+        match: [/^\+?[1-9]\d{7,14}$/, 'Please enter a valid phone number'],
+        maxlength: [15, 'Phone number cannot exceed 15 characters']
     }
 }, { 
     timestamps: true 

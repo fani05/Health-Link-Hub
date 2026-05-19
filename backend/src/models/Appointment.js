@@ -25,12 +25,13 @@ const appointmentSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'accepted', 'rejected', 'completed'],
+        enum: ['pending', 'accepted', 'rejected', 'completed', 'cancelled', 'no-show'],
         default: 'pending',
     },
     rejectionReason: {
         type: String,
         default: '',
+        maxlength: [200, 'Rejection reason cannot exceed 200 characters'],
     },
 }, { timestamps: true });
 
