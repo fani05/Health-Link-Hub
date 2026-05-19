@@ -78,6 +78,7 @@ function RegisterPage() {
                         <p className="sub">
                             Join HealthLink Hub to manage appointments and medical records in one place.
                         </p>
+                        {error && <div className="error-banner">{error}</div>}
                     </div>
 
                     <div className="role-toggle">
@@ -98,8 +99,6 @@ function RegisterPage() {
                             I'm a doctor
                         </button>
                     </div>
-
-                    {error && <div className="error-banner">{error}</div>}
 
                     <form onSubmit={handleRegister} className="register-form">
                         <div className="form-grid">

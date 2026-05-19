@@ -50,10 +50,11 @@ function LoginPage() {
                         </h1>
                         <p className="sub">
                             Sign in to manage your appointments and access your medical history.
+                            {successMessage && <div className="success-banner">{successMessage}</div>}
+                            {error && <div className="error-banner">{error}</div>}
                         </p>
 
-                        {successMessage && <div className="success-banner">{successMessage}</div>}
-                        {error && <div className="error-banner">{error}</div>}
+
                         <form onSubmit={handleLogin}>
                             <div className="field">
                                 <label>Email</label>

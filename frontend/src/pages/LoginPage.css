@@ -34,31 +34,9 @@
   color: var(--ink-soft);
   font-size: 13.5px;
   line-height: 1.55;
-  margin: 0 0 28px;
+  margin: 0 0 20px;
 }
 
-
-.error-banner,
-.success-banner {
-  font-size: 13px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  margin-bottom: 18px;
-  border-width: 1px;
-  border-style: solid;
-}
-
-.error-banner {
-  background: #fff0f0;
-  border-color: #fca5a5;
-  color: #dc2626;
-}
-
-.success-banner {
-  background: #f0fdf4;
-  border-color: #86efac;
-  color: #15803d;
-}
 
 
 .field {
@@ -248,7 +226,7 @@
 }
 
 
-@media (max-width: 880px) {
+@media (max-width: 940px) {
   .hero {
     grid-template-columns: 1fr;
     padding: 28px;
