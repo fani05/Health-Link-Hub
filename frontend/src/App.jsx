@@ -6,6 +6,7 @@ import DoctorDashboard from './pages/DoctorDashboard';
 import ProtectedRoute from './routes/ProtectedRoute';
 import PublicRoute from './routes/PublicRoute';
 import PatientDashboard from './pages/PatientDashboard';
+import AppointmentsPage from './pages/AppointmentsPage';
 
 function App() {
     return (
@@ -33,6 +34,12 @@ function App() {
                             <PatientDashboard />
                         </ProtectedRoute>
                     } />
+                    <Route path="/patient-dashboard/appointments" element={
+                        <ProtectedRoute allowedRole="patient">
+                            <AppointmentsPage />
+                        </ProtectedRoute>
+                    } />
+
                     <Route path="*" element={<Navigate to="/login" />} />
                 </Routes>
             </BrowserRouter>
