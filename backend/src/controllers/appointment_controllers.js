@@ -61,8 +61,11 @@ export const createAppointment = async (req, res) => {
             return res.status(400).json({ message: 'Clinic is closed on weekends' });
         }
 
-        // past date check
-        if (appointmentDate < new Date()) {
+        // past date check (compare full slot datetime to now, not just the date)
+        const [slotHours, slotMinutes] = time.split(':').map(Number);
+        const slotDateTime = new Date(appointmentDate);
+        slotDateTime.setHours(slotHours, slotMinutes, 0, 0);
+        if (slotDateTime < new Date()) {
             return res.status(400).json({ message: 'Cannot book an appointment in the past' });
         }
 
@@ -88,7 +91,7 @@ export const createAppointment = async (req, res) => {
         const sameDayRequest = await Appointment.findOne({
             patient: req.user._id,
             doctor,
-            date: appointmentDate,
+            date,
             status: { $in: ['pending', 'accepted'] },
         });
         if (sameDayRequest) {

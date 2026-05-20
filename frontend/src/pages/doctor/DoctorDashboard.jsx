@@ -1,5 +1,5 @@
-import { useAuth } from '../context/useAuth';
-import Navbar from '../components/Navbar';
+import { useAuth } from '../../context/useAuth';
+import Navbar from '../../components/Navbar';
 import './DoctorDashboard.css';
 
 function DoctorDashboard() {

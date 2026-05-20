@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import axiosClient from '../api/AxiosClient';
-import Navbar from '../components/Navbar';
+import axiosClient from '../../api/AxiosClient';
+import Navbar from '../../components/Navbar';
 import './AppointmentsPage.css';
 import { useNavigate } from 'react-router-dom';
 

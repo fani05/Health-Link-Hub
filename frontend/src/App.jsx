@@ -2,11 +2,11 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import DoctorDashboard from './pages/DoctorDashboard';
+import DoctorDashboard from './pages/doctor/DoctorDashboard';
 import ProtectedRoute from './routes/ProtectedRoute';
 import PublicRoute from './routes/PublicRoute';
-import PatientDashboard from './pages/PatientDashboard';
-import AppointmentsPage from './pages/AppointmentsPage';
+import PatientDashboard from './pages/patient/PatientDashboard';
+import AppointmentsPage from './pages/patient/AppointmentsPage';
 
 function App() {
     return (

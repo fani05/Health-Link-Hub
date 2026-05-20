@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation} from 'react-router-dom';
-import { useAuth } from '../context/useAuth';
-import axiosClient from '../api/AxiosClient';
-import Navbar from '../components/Navbar';
+import { useAuth } from '../../context/useAuth';
+import axiosClient from '../../api/AxiosClient';
+import Navbar from '../../components/Navbar';
 import './PatientDashboard.css';
 
 function PatientDashboard() {
