@@ -21,8 +21,12 @@ const markExpiredAppointments = async (filter) => {
         apptDate.setHours(hours, minutes, 0, 0);
 
         if (apptDate < now) {
-            appt.status = 'rejected';
-            appt.rejectionReason = '[System] Doctor did not respond in time';
+            if (appt.status === 'pending') {
+                appt.status = 'rejected';
+                appt.rejectionReason = '[System] Doctor did not respond in time';
+            } else {
+                appt.status = 'completed';
+            }
             await appt.save();
         }
     }
@@ -157,6 +161,78 @@ export const getDoctors = async (req, res) => {
             .select('name specialization');
 
         res.json(doctors);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+export const getDoctorAppointments = async (req, res) => {
+    try {
+        await markExpiredAppointments({ doctor: req.user._id });
+
+        const appointments = await Appointment.find({ doctor: req.user._id })
+            .populate('patient', 'name phone')
+            .sort({ date: 1, time: 1 });
+
+        res.json(appointments);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+export const acceptAppointment = async (req, res) => {
+    try {
+        const appointment = await Appointment.findById(req.params.id);
+        if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+
+        if (appointment.doctor.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+        if (appointment.status !== 'pending') {
+            return res.status(400).json({ message: `Cannot accept a ${appointment.status} appointment` });
+        }
+
+        appointment.status = 'accepted';
+        await appointment.save();
+        res.json(appointment);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+export const rejectAppointment = async (req, res) => {
+    try {
+        const { reason } = req.body;
+        const appointment = await Appointment.findById(req.params.id);
+        if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+
+        if (appointment.doctor.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+        if (appointment.status !== 'pending') {
+            return res.status(400).json({ message: `Cannot reject a ${appointment.status} appointment` });
+        }
+
+        appointment.status = 'rejected';
+        appointment.rejectionReason = reason?.trim() || '';
+        await appointment.save();
+        res.json(appointment);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+export const cancelAppointmentByDoctor = async (req, res) => {
+    try {
+        const appointment = await Appointment.findById(req.params.id);
+        if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+        if (appointment.doctor.toString() !== req.user._id.toString())
+            return res.status(403).json({ message: 'Not authorized' });
+        if (appointment.status !== 'accepted')
+            return res.status(400).json({ message: `Cannot cancel a ${appointment.status} appointment` });
+        appointment.status = 'cancelled';
+        await appointment.save();
+        res.json(appointment);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
