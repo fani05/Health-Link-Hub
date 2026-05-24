@@ -4,8 +4,7 @@ import User from '../models/User.js';
 const VALID_SLOTS = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
                      '12:00', '12:30', '14:00', '14:30', '15:00', '15:30',
                      '16:00', '16:30'];
-
-
+               
 // This function is called before fetching appointments for a user to ensure that any past 
 // appointments whith no response are marked rejected
 const markExpiredAppointments = async (filter) => {
@@ -20,13 +19,9 @@ const markExpiredAppointments = async (filter) => {
         const [hours, minutes] = appt.time.split(':').map(Number);
         apptDate.setHours(hours, minutes, 0, 0);
 
-        if (apptDate < now) {
-            if (appt.status === 'pending') {
-                appt.status = 'rejected';
-                appt.rejectionReason = '[System] Doctor did not respond in time';
-            } else {
-                appt.status = 'completed';
-            }
+       if (apptDate < now) {
+            appt.status = 'rejected';
+            appt.rejectionReason = '[System] Doctor did not respond in time';
             await appt.save();
         }
     }
