@@ -1,0 +1,22 @@
+import express from 'express';
+import {
+    getPatients,
+    getPatientData,
+    createRecord,
+    updateRecord,
+    deleteRecord,
+    markNoShow,
+} from '../controllers/medical_record_controllers.js';
+import { protect } from '../middleware/auth_middleware.js';
+import { doctorOnly } from '../middleware/role_middleware.js';
+
+const router = express.Router();
+
+router.get('/patients', protect, doctorOnly, getPatients);
+router.get('/patients/:patientId', protect, doctorOnly, getPatientData);
+router.post('/', protect, doctorOnly, createRecord);
+router.put('/:id', protect, doctorOnly, updateRecord);
+router.delete('/:id', protect, doctorOnly, deleteRecord);
+router.patch('/appointment/:appointmentId/no-show', protect, doctorOnly, markNoShow);
+
+export default router;

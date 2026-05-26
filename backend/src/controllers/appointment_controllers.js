@@ -11,7 +11,7 @@ const markExpiredAppointments = async (filter) => {
     const now = new Date();
     const appointments = await Appointment.find({
         ...filter,
-        status: { $in: ['accepted', 'pending'] },
+        status: 'pending',
     });
 
     for (const appt of appointments) {
@@ -19,7 +19,7 @@ const markExpiredAppointments = async (filter) => {
         const [hours, minutes] = appt.time.split(':').map(Number);
         apptDate.setHours(hours, minutes, 0, 0);
 
-       if (apptDate < now) {
+        if (apptDate < now) {
             appt.status = 'rejected';
             appt.rejectionReason = '[System] Doctor did not respond in time';
             await appt.save();

@@ -4,6 +4,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import auth_routes from './src/routes/auth_routes.js';
 import appointment_routes from './src/routes/appointment_routes.js';
+import medical_record_routes from './src/routes/medical_record_routes.js';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 
@@ -28,6 +29,7 @@ app.use(express.json({limit: '10kb'})); // json parsing
 app.use('/api/auth', authLimiter);
 app.use('/api/auth', auth_routes);
 app.use('/api/appointments', appointment_routes);
+app.use('/api/medical-records', medical_record_routes);
 
 const connectDB = async () => {
     try {
