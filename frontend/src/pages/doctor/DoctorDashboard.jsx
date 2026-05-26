@@ -52,6 +52,32 @@ function DoctorDashboard() {
             .filter(a => ['accepted', 'completed'].includes(a.status))
             .map(a => a.patient._id)
     ).size;
+
+    const handleAccept = async (id) => {
+        try {
+            await axiosClient.patch(`/appointments/${id}/accept`);
+            setAppointments(prev => prev.map(a =>
+                a._id === id ? { ...a, status: 'accepted' } : a
+            ));
+            setSuccess('Appointment accepted successfully.');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to accept appointment.');
+        }
+    };
+
+    const handleReject = async (id) => {
+        try {
+            await axiosClient.patch(`/appointments/${id}/reject`, { reason: rejectReason });
+            setAppointments(prev => prev.map(a =>
+                a._id === id ? { ...a, status: 'rejected', rejectionReason: rejectReason } : a
+            ));
+            setRejectingId(null);
+            setRejectReason('');
+            setSuccess('Appointment rejected.');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to reject appointment.');
+        }
+    };
     if (loading) {
         return (
             <div className="page">
@@ -98,6 +124,92 @@ function DoctorDashboard() {
                             <p className="metric-value">{totalPatients}</p>
                         </div>
                     </div>
+
+                    {/* Pending requests */}
+                    <p className="section-title" style={{ marginTop: '10px' }}>Pending requests</p>
+                    {pendingAppointments.length === 0 ? (
+                        <div className="no-appt-card">
+                            <p>No pending appointment requests.</p>
+                        </div>
+                    ) : (
+                        <div className="appts-table-wrap">
+                            <table className="appts-table pending-table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Phone</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {pendingAppointments.map(a => (
+                                        <React.Fragment key={a._id}>
+                                            <tr className="appt-row">
+                                                <td>{a.patient.name}</td>
+                                                <td className="muted">{a.patient.phone}</td>
+                                                <td>{formatDate(a.date)}</td>
+                                                <td>{a.time}</td>
+                                                <td>
+                                                    <div className="action-cell">
+                                                        <button
+                                                            className="btn-accept"
+                                                            onClick={() => handleAccept(a._id)}
+                                                            type="button"
+                                                        >
+                                                            Accept
+                                                        </button>
+                                                        <button
+                                                            className="btn-reject"
+                                                            onClick={() => {
+                                                                setRejectingId(rejectingId === a._id ? null : a._id);
+                                                                setRejectReason('');
+                                                            }}
+                                                            type="button"
+                                                        >
+                                                            Reject
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {rejectingId === a._id && (
+                                                <tr className="reject-expand-row">
+                                                    <td colSpan="5">
+                                                        <div className="reject-inline">
+                                                            <input
+                                                                className="reject-input"
+                                                                type="text"
+                                                                placeholder="Reason for rejection (optional)"
+                                                                value={rejectReason}
+                                                                onChange={e => setRejectReason(e.target.value)}
+                                                                maxLength={200}
+                                                                autoFocus
+                                                            />
+                                                            <button
+                                                                className="btn-reject-confirm"
+                                                                onClick={() => handleReject(a._id)}
+                                                                type="button"
+                                                            >
+                                                                Confirm
+                                                            </button>
+                                                            <button
+                                                                className="btn-cancel-reject"
+                                                                onClick={() => setRejectingId(null)}
+                                                                type="button"
+                                                            >
+                                                                Cancel
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </React.Fragment>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
