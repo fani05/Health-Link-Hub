@@ -78,6 +78,20 @@ function DoctorDashboard() {
             setError(err.response?.data?.message || 'Failed to reject appointment.');
         }
     };
+
+    const handleCancel = async (id) => {
+        if (!window.confirm('Are you sure you want to cancel this appointment?')) return;
+        try {
+            await axiosClient.patch(`/appointments/${id}/doctor-cancel`);
+            setAppointments(prev => prev.map(a =>
+                a._id === id ? { ...a, status: 'cancelled' } : a
+            ));
+            setSuccess('Appointment cancelled.');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to cancel appointment.');
+        }
+    };
+
     if (loading) {
         return (
             <div className="page">
@@ -93,12 +107,9 @@ function DoctorDashboard() {
 
     return (
         <div className="page">
-            <div className="card">
             <div className="card dashboard-card doctor-dashboard">
                 <Navbar />
 
-                <div style={{ padding: '36px 56px' }}>
-                    <h1>Doctor Dashboard</h1>
                 <div className="dashboard-body">
                     <div className="dashboard-header">
                         <h1 className="dash-headline">
@@ -210,10 +221,58 @@ function DoctorDashboard() {
                             </table>
                         </div>
                     )}
+
+                    {/* Upcoming appointments */}
+                    <div className="section-header">
+                        <p className="section-title">Upcoming appointments</p>
+                        {upcomingAppointments.length > 4 && (
+                            <span className="scroll-hint">↓ scroll for more</span>
+                        )}
+                    </div>
+                    {upcomingAppointments.length === 0 ? (
+                        <div className="no-appt-card">
+                            <p>No upcoming appointments.</p>
+                        </div>
+                    ) : (
+                        <div className="appts-table-wrap">
+                            <table className="appts-table upcoming-table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Phone</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {upcomingAppointments.map(a => (
+                                        <tr key={a._id}>
+                                            <td>{a.patient.name}</td>
+                                            <td className="muted">{a.patient.phone}</td>
+                                            <td>{formatDate(a.date)}</td>
+                                            <td>{a.time}</td>
+                                            <td>
+                                                <div className="action-cell">
+                                                    <button
+                                                        className="btn-cancel"
+                                                        onClick={() => handleCancel(a._id)}
+                                                        type="button"
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
     );
 }
 
-export default DoctorDashboard;export default DoctorDashboard;
+export default DoctorDashboard;

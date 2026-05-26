@@ -221,3 +221,83 @@
     transition: all .15s ease;
 }
 
+.btn-reject:hover {
+    background: #a32d2d;
+    color: white;
+}
+
+/* Inline rejection form */
+.reject-expand-row td {
+    background: #fff8f8;
+    border-top: none;
+    padding: 8px 14px 10px;
+}
+
+.reject-inline {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.reject-input {
+    flex: 1;
+    font-family: inherit;
+    font-size: 12px;
+    padding: 6px 10px;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    outline: none;
+    background: white;
+    color: var(--ink);
+    transition: border-color .15s ease;
+}
+
+.reject-input:focus {
+    border-color: #a32d2d;
+}
+
+.btn-reject-confirm {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: #a32d2d;
+    color: white;
+    transition: opacity .15s ease;
+    white-space: nowrap;
+}
+
+.btn-reject-confirm:hover {
+    opacity: 0.85;
+}
+
+.btn-cancel-reject {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: #e8ebf5;
+    color: var(--ink-soft);
+    transition: all .15s ease;
+    white-space: nowrap;
+}
+
+.btn-cancel-reject:hover {
+    background: var(--ink-soft);
+    color: white;
+}
+
+@media (max-width: 880px) {
+    .dashboard-body {
+        padding: 0 28px 32px;
+    }
+    .metric-grid {
+        grid-template-columns: 1fr;
+    }
+}
