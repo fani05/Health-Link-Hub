@@ -30,7 +30,6 @@ function Navbar() {
                 {user?.role === 'doctor' && (
                     <>
                         <Link to="/doctor-dashboard">Dashboard</Link>
-                        <Link to="/doctor-medical-records">Medical Records</Link>
                     </>
                 )}
                 {user?.role === 'patient' && (
