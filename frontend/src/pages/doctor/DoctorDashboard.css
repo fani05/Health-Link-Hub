@@ -91,14 +91,14 @@
 }
 
 .doctor-dashboard .success-banner {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 /* Table */
 .doctor-dashboard .appts-table-wrap {
     border: 1px solid var(--line);
     border-radius: 12px;
-    max-height: 175px;
+    max-height: 167px;
     overflow-y: auto;
     overflow-x: auto;
     scrollbar-width: thin;

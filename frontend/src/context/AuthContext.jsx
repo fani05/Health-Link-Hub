@@ -23,32 +23,30 @@ const clearStorage = () => {
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(getStoredUser);
-    const [loading, setLoading] = useState(true);
+    // If there's no token we're not loading — no async check needed
+    const [loading, setLoading] = useState(
+        () => !!(localStorage.getItem('token') || sessionStorage.getItem('token'))
+    );
 
     useEffect(() => {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        if (!token) return;
 
-        if (token) {
-            const checkUser = async () => {
-                try {
-                    const res = await axiosClient.get('/auth/me');
-                    setUser(res.data);
-                } catch (error) {
-                    if (error.response?.status === 401) {
-                        clearStorage();
-                        setUser(null);
-                    }
-                } finally {
-                    setLoading(false);
+        const checkUser = async () => {
+            try {
+                const res = await axiosClient.get('/auth/me');
+                setUser(res.data);
+            } catch (error) {
+                if (error.response?.status === 401) {
+                    clearStorage();
+                    setUser(null);
                 }
-            };
-            checkUser();
-        } else {
-            clearStorage();
-            setUser(null);
-            setLoading(false);
-        }
-    }, []); // [] ensures this runs only once and not on every render
+            } finally {
+                setLoading(false);
+            }
+        };
+        checkUser();
+    }, []);
 
     useEffect(() => { // Listen for unauthorized events to handle token expiration or invalidation
         const handleUnauthorized = () => {
