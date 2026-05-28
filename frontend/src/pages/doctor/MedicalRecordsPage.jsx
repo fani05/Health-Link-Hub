@@ -303,3 +303,32 @@ function MedicalRecordsPage() {
                                             onClick={() => setSelectedPatient(p)}
                                         >
                                             <p className="patient-name">{p.name}</p>
+                                            <p className="patient-phone">{p.phone}</p>
+                                        </div>
+                                    ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="details-panel">
+                        {!selectedPatient ? (
+                            <div className="no-selection">
+                                <p>Select a patient from the list to view their records.</p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="details-header">
+                                    <p className="details-patient-name">{selectedPatient.name}</p>
+                                    <p className="details-patient-phone">{selectedPatient.phone}</p>
+                                </div>
+                                {renderPatientPanel()}
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default MedicalRecordsPage;
