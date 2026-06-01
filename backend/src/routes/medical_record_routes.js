@@ -6,11 +6,14 @@ import {
     updateRecord,
     deleteRecord,
     markNoShow,
+    getMyInterventions,
 } from '../controllers/medical_record_controllers.js';
 import { protect } from '../middleware/auth_middleware.js';
-import { doctorOnly } from '../middleware/role_middleware.js';
+import { doctorOnly, patientOnly } from '../middleware/role_middleware.js';
 
 const router = express.Router();
+
+router.get('/mine', protect, patientOnly, getMyInterventions);
 
 router.get('/patients', protect, doctorOnly, getPatients);
 router.get('/patients/:patientId', protect, doctorOnly, getPatientData);
