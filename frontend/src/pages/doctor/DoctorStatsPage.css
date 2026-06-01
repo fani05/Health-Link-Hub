@@ -1,0 +1,82 @@
+.doctor-stats .metric-grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.metric-card--warn .metric-value {
+    color: #b45309;
+}
+
+.metric-unit {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+.stats-hint {
+    font-size: 14px;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-top: 32px;
+}
+
+.stats-error {
+    font-size: 13px;
+    color: #a32d2d;
+    text-align: center;
+    margin-top: 32px;
+}
+
+/* ── Procedures list ── */
+.stats-section {
+    margin-top: 8px;
+}
+
+.procedures-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f5f7fb;
+    border-radius: 12px;
+    padding: 16px 20px;
+}
+
+.procedure-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.procedure-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    width: 200px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.procedure-bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.procedure-bar {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 999px;
+    transition: width .4s ease;
+}
+
+.procedure-count {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    width: 32px;
+    text-align: right;
+    flex-shrink: 0;
+}

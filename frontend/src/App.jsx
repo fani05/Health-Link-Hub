@@ -3,6 +3,8 @@ import { AuthProvider } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DoctorDashboard from './pages/doctor/DoctorDashboard';
+import MedicalRecordsPage from './pages/doctor/MedicalRecordsPage';
+import DoctorStatsPage from './pages/doctor/DoctorStatsPage';
 import ProtectedRoute from './routes/ProtectedRoute';
 import PublicRoute from './routes/PublicRoute';
 import PatientDashboard from './pages/patient/PatientDashboard';
@@ -27,6 +29,16 @@ function App() {
                     <Route path="/doctor-dashboard" element={
                         <ProtectedRoute allowedRole="doctor">
                             <DoctorDashboard />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/doctor-medical-records" element={
+                        <ProtectedRoute allowedRole="doctor">
+                            <MedicalRecordsPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/doctor-stats" element={
+                        <ProtectedRoute allowedRole="doctor">
+                            <DoctorStatsPage />
                         </ProtectedRoute>
                     } />
                     <Route path="/patient-dashboard" element={
