@@ -37,6 +37,7 @@ function Navbar() {
                     <>
                         <Link to="/patient-dashboard">Dashboard</Link>
                         <Link to="/patient-dashboard/appointments">Book Appointment</Link>
+                        <Link to="/patient-dashboard/interventions">Intervention History</Link>
                     </>
                 )}
                 {user && (

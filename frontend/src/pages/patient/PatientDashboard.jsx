@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation} from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import axiosClient from '../../api/AxiosClient';
 import Navbar from '../../components/Navbar';
@@ -8,19 +8,35 @@ import './PatientDashboard.css';
 function PatientDashboard() {
     const { user } = useAuth();
     const [appointments, setAppointments] = useState([]);
+    const [interventionsCount, setInterventionsCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const [expandedId, setExpandedId] = useState(null);
     const location = useLocation();
-    const successMessage = location.state?.message;
-    
+    const navigate = useNavigate();
+
+    // pick up the navigation state (e.g. after booking), then clear it so a refresh won't re-show it
     useEffect(() => {
-        axiosClient.get('/appointments/mine')
-            .then(res => setAppointments(res.data))
+        if (location.state?.message) {
+            setSuccessMessage(location.state.message);
+            navigate(location.pathname, { replace: true, state: null });
+        }
+    }, [location.pathname, location.state, navigate]);
+
+    useEffect(() => {
+        Promise.all([
+            axiosClient.get('/appointments/mine'),
+            axiosClient.get('/medical-records/mine'),
+        ])
+            .then(([apptRes, recordsRes]) => {
+                setAppointments(apptRes.data);
+                setInterventionsCount(recordsRes.data.length);
+            })
             .catch(err => {
-                console.error('Failed to load appointments:', err);
-                setError('Could not load your appointments.');
+                console.error('Failed to load dashboard data:', err);
+                setError('Could not load your dashboard data.');
             })
             .finally(() => setLoading(false));
     }, []);
@@ -40,9 +56,6 @@ function PatientDashboard() {
     }).length;
 
     const pendingCount = appointments.filter(a => a.status === 'pending').length;
-
-    // how many total interventions (completed appointments)
-    const interventionsCount = 0;
 
     const activeAppointments = appointments.filter(a => {
         const apptDate = parseAppointmentDate(a.date, a.time);
@@ -91,8 +104,10 @@ function PatientDashboard() {
                 // ...a clone of a
                 a._id === id ? { ...a, status: 'cancelled' } : a
             ));
+            setSuccessMessage('Appointment cancelled successfully.');
         } catch (err) {
             console.error('Failed to cancel:', err);
+            setError('Failed to cancel the appointment.');
         }
     };
 

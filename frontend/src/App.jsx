@@ -8,6 +8,7 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import PublicRoute from './routes/PublicRoute';
 import PatientDashboard from './pages/patient/PatientDashboard';
 import AppointmentsPage from './pages/patient/AppointmentsPage';
+import InterventionHistoryPage from './pages/patient/InterventionHistoryPage';
 
 function App() {
     return (
@@ -43,6 +44,11 @@ function App() {
                     <Route path="/patient-dashboard/appointments" element={
                         <ProtectedRoute allowedRole="patient">
                             <AppointmentsPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/patient-dashboard/interventions" element={
+                        <ProtectedRoute allowedRole="patient">
+                            <InterventionHistoryPage />
                         </ProtectedRoute>
                     } />
 
