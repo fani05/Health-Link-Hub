@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axiosClient from '../api/axiosClient';
+import axiosClient from '../api/AxiosClient';
 import Navbar from '../components/Navbar';
 import './RegisterPage.css';
 
