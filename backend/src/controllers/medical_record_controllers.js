@@ -124,6 +124,33 @@ export const deleteRecord = async (req, res) => {
     }
 };
 
+export const getStats = async (req, res) => {
+    try {
+        const doctorId = req.user._id;
+
+        const records = await MedicalRecord.find({ doctor: doctorId }).lean();
+
+        const totalRevenue = records.reduce((sum, r) => sum + r.cost, 0);
+        const completedAppointments = records.length;
+        const totalPatients = new Set(records.map(r => r.patient.toString())).size;
+
+        const noShows = await Appointment.countDocuments({ doctor: doctorId, status: 'no-show' });
+
+        const procedureCount = {};
+        for (const r of records) {
+            procedureCount[r.procedure] = (procedureCount[r.procedure] || 0) + 1;
+        }
+        const topProcedures = Object.entries(procedureCount)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .map(([name, count]) => ({ name, count }));
+
+        res.json({ totalPatients, totalRevenue, completedAppointments, noShows, topProcedures });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
 export const markNoShow = async (req, res) => {
     try {
         const appointment = await Appointment.findById(req.params.appointmentId);

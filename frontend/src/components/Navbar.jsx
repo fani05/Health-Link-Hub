@@ -27,12 +27,13 @@ function Navbar() {
                         <Link to="/register">Sign up</Link>
                     </>
                 )}
-                {user?.role === 'doctor' && (
+                {user?.role === 'doctor' && 
                     <>
                         <Link to="/doctor-dashboard">Dashboard</Link>
                         <Link to="/doctor-medical-records">Medical Records</Link>
+                        <Link to="/doctor-stats">Statistics</Link>
                     </>
-                )}
+                }
                 {user?.role === 'patient' && (
                     <>
                         <Link to="/patient-dashboard">Dashboard</Link>

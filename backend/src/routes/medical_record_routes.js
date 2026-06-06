@@ -2,6 +2,7 @@ import express from 'express';
 import {
     getPatients,
     getPatientData,
+    getStats,
     createRecord,
     updateRecord,
     deleteRecord,
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.get('/mine', protect, patientOnly, getMyInterventions);
 
+router.get('/stats', protect, doctorOnly, getStats);
 router.get('/patients', protect, doctorOnly, getPatients);
 router.get('/patients/:patientId', protect, doctorOnly, getPatientData);
 router.post('/', protect, doctorOnly, createRecord);
