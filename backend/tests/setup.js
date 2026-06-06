@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
+process.env.JWT_SECRET = 'test-secret-key';
+
 let mongod;
 
 // creates an in-memory MongoDB instance before all tests, connects mongoose to it, and cleans up after each test
